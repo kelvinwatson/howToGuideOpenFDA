@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How-To Guide for the DailyMed API</title>
+    <!-- Latest compiled and minified CSS -->
+    
+    <link rel="stylesheet" href="css/bootstrap.css">
+    </head>
+
+  <body>
+
+      <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">DailyMed API How-To</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"></span> Guide <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">Nav header</li>
+                  <li><a href="#">Separated link</a></li>
+                  <li><a href="#">One more separated link</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="../navbar/"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-phone"></span> Contact<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <form style="margin: 0px" accept-charset="UTF-8" action="/sessions" method="post">
+                    <!--Citation: http://mimi.kaktusteam.de/blog-posts/2012/02/login-menu-with-twitter-bootstrap/00-->
+                    <div style="margin:0; padding:0; display:inline">
+                      <input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="4L/A2ZMYkhTD3IiNDMTuB/fhPRvyCNGEsaZocUUpw40=" />
+                    </div>
+                    <fieldset class='textbox' style="padding:10px">
+                      <input style="margin-top: 8px" type="text" placeholder="Username" />
+                      <input style="margin-top: 8px" type="password" placeholder="Passsword" />
+                      <input class="btn btn-primary" name="commit" type="submit" value="Log In" />
+                    </fieldset>
+                  </form>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+       </div>
+    </div>
+    
+    <div class="container"> 
+      <div class="row">
+        <div class="col-md-8">
+          <h1>Introduction to the DailyMed API</h1>
+          
+          <h2>What is DailyMed?</h3> 
+          <p>DailyMed provides access to package inserts (also known as drug labels) for FDA-approved medications, and is maintained by the U.S. National Library of Medicine (NLM). Contents of DailyMed are updated on a daily basis (hence the name).</p>
+          
+          <h2>RESTful API's</h2>
+          <p>Dailymed's API is a RESTful web service. REST, which stands for "Representational State Transfer," consists of architectural design principles for building scalable web services which emphasize the properties of performance, scalability, reliability, portability, maintainability to name a few. REST is protocol-independent, but RESTful systems (systems built on the constraints of REST) use HTTP as its underlying protocol to communicate between the client and the server. Thus, there are several methods used to interact with representations of resources. These include the following:
+          <ul>
+            <li>GET: retrieve a resource without modifying, safe, read-only</li>
+            <li>POST: create a resource </li> 
+            <li>PUT: modify/update a resource</li> 
+            <li>DELETE: delete a resource</li> 
+          </ul>
+          REST proposes specific contraints to yield these properties.
+          <dl>
+            <dt>Separation of client and server</dt>
+            <dd>Clients should not have to worry about data storage, and servers should not have to worry about user interfaces.</dd>
+            <dt>Statelessness</dt>
+            <dd></dd>
+            <dt>Cacheability</dt>
+            <dd>Responses must be cacheable</dd>
+            <dt>Layered system</dt>
+            <dt>Uniform interface</dt>
+            <dd></dd>
+          </dl>
+          <p>A RESTful web service consists of the following basic components:
+          <ul>
+            <li>base URI (Uniform Resource Identifer): This is the entry point to the API</li>
+            <li>media type/resource representation, usually JSON or XML</li>
+            <li>HTTP method, such as GET, PUT, POST, or DELETE</li>
+          </ul>
+          
+          <h2>The DailyMed API</h2>
+          <table border="1">
+            <tr>
+              <th>Base URI</th>
+              <td>Resource representation</td>
+              <td>JSON/XML</td>
+            </tr>
+            <tr>
+              <th>Resource representation</th>
+              <td>JSON/XML</td>
+              <td>JSON/XML</td>
+            </tr>
+            <tr>
+              <th>HTTP method</th>
+              <td>GET</td>
+              <td>GET</td>
+            </tr>
+          </table>
+          
+
+          </div>
+        <div class="col-md-4">
+          <div id="sideMenu">
+            <div class="panel list-group">
+              <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu">Step 1 <span class="label label-info">5</span> <span class="glyphicon glyphicon-envelope pull-right"></span></a>
+               <div id="sm" class="sublinks collapse">
+                <a class="list-group-item small"><span class="glyphicon glyphicon-chevron-right"></span> What is DailyMed</a>
+                <a class="list-group-item small"><span class="glyphicon glyphicon-chevron-right"></span> The Base URI</a>
+               </div>
+              <a href="#" class="list-group-item" data-toggle="collapse" data-target="#sl" data-parent="#menu">Step 2 <span class="glyphicon glyphicon-tag pull-right"></span></a>
+               <div id="sl" class="sublinks collapse">
+                <a class="list-group-item small"><span class="glyphicon glyphicon-chevron-right"></span> saved tasks</a>
+                <a class="list-group-item small"><span class="glyphicon glyphicon-chevron-right"></span> add new task</a>
+               </div>
+              <a href="#" class="list-group-item">Step 3<span class="glyphicon glyphicon-stats pull-right"></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-8">
+          <h3>Medical Office Assistants</h3>
+            <p>Manage patient files and keep appointments organized in a detailed calendar.</p>
+            <p><a href="#" class="btn btn-info">More &raquo;</a></p>
+        </div>
+        <div class="col-xs-6 col-md-4">
+            <h3>Patients</h3>
+            <p>View your scheduled appointments.</p>
+            <p><a href="#" class="btn btn-info">More &raquo;</a></p>
+        </div>
+      </div>
+
+
+      <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+          <p class="navbar-text pull-left">Kelvin Watson (OSU ID 932540242)</p>
+        </div>
+      </div>
+
+
+      <!--<hr>
+      <div class="footer">
+      <p>&copy; 2015</p>
+      </div>-->
+    </div>
+
+   
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+ <!-- <script language="javascript">
+    $('.dropdown-toggle').dropdown();
+    $('.dropdown-menu').find('form').click(function (e) {
+        e.stopPropagation();
+      });
+  </script>-->
+  </body>
+</html>
