@@ -64,67 +64,68 @@
     <div class="container"> 
       <div class="row">
         <div class="col-md-8">
-          <h1>Introduction to the DailyMed API</h1>
-          
-          <h2>What is DailyMed?</h3> 
-          <p>DailyMed provides access to package inserts (also known as drug labels) for FDA-approved medications, and is maintained by the U.S. National Library of Medicine (NLM). Contents of DailyMed are updated on a daily basis (hence the name).</p>
-          
-          <h2>RESTful API's</h2>
-          <p>Dailymed's API is a RESTful web service. REST, which stands for "Representational State Transfer," consists of architectural design principles for building scalable web services which emphasize the properties of performance, scalability, reliability, portability, maintainability to name a few. REST is protocol-independent, but RESTful systems (systems built on the constraints of REST) use HTTP as its underlying protocol to communicate between the client and the server. Thus, there are several methods used to interact with representations of resources. These include the following:
-          <ul>
-            <li>GET: retrieve a resource without modifying, safe, read-only</li>
-            <li>POST: create a resource </li> 
-            <li>PUT: modify/update a resource</li> 
-            <li>DELETE: delete a resource</li> 
-          </ul>
-          REST proposes specific contraints to yield these properties.
-          <dl>
-            <dt>Separation of client and server</dt>
-            <dd>Clients should not have to worry about data storage, and servers should not have to worry about user interfaces.</dd>
-            <dt>Statelessness</dt>
-            <dd></dd>
-            <dt>Cacheability</dt>
-            <dd>Responses must be cacheable</dd>
-            <dt>Layered system</dt>
-            <dt>Uniform interface</dt>
-            <dd></dd>
-          </dl>
-          <p>A RESTful web service consists of the following basic components:
-          <ul>
-            <li>base URI (Uniform Resource Identifer): This is the entry point to the API</li>
-            <li>media type/resource representation, usually JSON or XML</li>
-            <li>HTTP method, such as GET, PUT, POST, or DELETE</li>
-          </ul>
-          
-          <h2>The DailyMed API</h2>
-          <table class="table" border="1">
+          <h1>Calling the DailyMed API with PHP</h1>
+          <h2>Your First REST Request to the DailyMed API</h3> 
+          <p>There are two ways to access the DailyMed API using PHP. The requirements, pro's and con's of each method are listed below:</p>
+          <table border="1" class="table">
             <thead>
               <tr>
-                <th>Component</th>
-                <th>DailyMed Specifics</th>
-                <th>Notes</th>
+                <th>Method</th>
+                <th>Requirements</th>
+                <th>Pro's</th>
+                <th>Con's</th>
+                <th>Further Reading</th>
               </tr>
             </thead>
             <tr>
-              <th>Base URI</th>
-              <td>Version 1: http://dailymed.nlm.nih.gov/dailymed/services/<br>
-                  Version 2: http://dailymed.nlm.nih.gov/dailymed/services/v2/</td>
-              <td>DailyMed lists two URI versions in their documentation, but it appears that all of the resources are on version 2. Therefore, select version 2.</td>
+              <th>file_get_contents</th>
+              <td><ul><li>PHP 4.3 or later</li><li>allow_url_fopen must be enabled</li></ul></td>
+              <td><ul><li>simpler</li><li>good for short scripts</li></ul></td>
+              <td><ul><li>GET requests only, cannot perform POST calls</li><li>slower than cURL</li></td>
+              <td><a href="http://php.net/manual/en/function.file-get-contents.php" target="_blank">PHP.net</a></td>
             </tr>
             <tr>
-              <th>Resource representation</th>
-              <td>JSON/XML</td>
-              <td>The DailyMed web service can return JSON or XML. Some resources only return XML.</td>
-            </tr>
-            <tr>
-              <th>HTTP method</th>
-              <td>GET</td>
-              <td>Because the intent of this API is to retrieve/return data without modification, GET is the only method supported.</td>
+              <th>cURL library</th>
+              <td><ul><li>cURL must be installed</li><li>cURL support must be enabled</li></ul></td>
+              <td><ul><li>allows POST calls</li><li>more features</li><li>faster than file_get_contents</li></ul></td>
+              <td><ul><li>more difficult to learn</li></ul></td>
+              <td><a href="http://php.net/manual/en/book.curl.php" target="_blank">PHP.net manual</a></td>
             </tr>
           </table>
-          
-
-          </div>
+          <p>The decision to use either of the above remains with the user. However, you will need to ensure that the above requirements are met. To check, include the following in your PHP code</p>
+          <code>&lt;?php<br>echo phpinfo();<br>?&gt;</code>
+          <h2>Using file_get_contents</h2>
+          <p>We will be using <code>file_get_contents</code> as it is simpler, and is sufficient for the GET calls in this guide.</p>
+          <p>To start, we will include the following code:</p>
+          <code>&lt;?php<br>
+          error_reporting(E_ALL);<br>
+          ini_set('display_errors',1);<br>
+          header('Content-type: text/plain');<br>
+          ?&gt;</code>
+          <p><aside><em>Note that <code>Content-type: text/plain</code> is used at this stage in order to quickly test the output of the resource without entering HTML. In subsequent steps, we will use HTML to illustrate how to output the contents of the response.</em></aside></p>
+          <p>Finally, we are ready to make our first call. Consider the following example. You are a pharmacist, and a patient asks you for label information about atorvastatin, a drug used in the treatment of high cholesterol:</p>
+          <p>First, we need to know what the base URI for the API is. This serves as our entry point:<br>
+          <code>$baseURI = 'http://dailymed.nlm.nih.gov/dailymed/services/v2/';</code></p>
+          <p>To facilitate explanation, I've separated the different parts of the request, then concatenated them prior to the call. This allows the code to be reused for subsequent calls to the API.</p>
+          <p>Because we know that we want to retrieve a product label (SPL, or Structured Product Labeling), we will use the <code>/spls</code> resource:<br>
+          <code>$resource = 'spls;</code></p>          
+          <p>This resouce returns either an XML or a JSON string. For this request, we will ask that the API return JSON:<br>
+          <code>$format = '.json';</code></p>
+          <p>Next, we will need to specify a query parameter. Although this filter is optional, we do not want to retrieve all SPL's. We only want to retrieve SPL's containing the drug name 'atorvastatin':<br> 
+          <code>$predicate = '?drug_name=';<br>
+          $expression = 'atorvastatin';</code><br>
+          <p>Now, we can concatenate the above and make our call:<br>
+          <code>$request = $baseURI .$resource .$predicate .$expression;<br>
+          $jsonString = file_get_contents($request);</code>
+          <p>Note that the above call is equivalent to <code>$request = 'http://dailymed.nlm.nih.gov/dailymed/services/v2/drugnames?drug_name=atorvastatin';</code>.</p> 
+          <p>To check that our call was successful, we can print the result using <code>var_dump($jsonString);</code>.</p>
+          <p>The result should look something like this:<br>
+          <img src="" alt="captureJSONString">. <p>You may notice that the resulting string is quite difficult to read. Furthermore, in order to work with this data, we need a way to decode this string. Fortunately, PHP has a <code>json_decode</code> function for this purpose:<br>
+          <code>$jsonArray = json_decode($jsonString,true);</code>
+          <p>The second argument passed into json_decode is a boolean value. If set to false or left unspecified, the function returns an object. When set to true, the function returns an associative array. In our example, the JSON string has now been converted to an associative array which enables us to work with the data. Notice that it is also much more human readable.<br>
+          <img src="" alt="captureJSONAssociativeArray">.
+           
+        </div>
         <div class="col-md-4">
           <div id="sideMenu">
             <div class="panel list-group">

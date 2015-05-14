@@ -11,6 +11,9 @@ html {
       -ms-text-size-adjust: 100%;
 }
 body {
+  padding-top: 70px;
+  padding-bottom: 70px;
+  
   margin: 0;
 }
 article,
@@ -6393,6 +6396,9 @@ button.close {
 .visible-lg-inline,
 .visible-lg-inline-block {
   display: none !important;
+}
+.whiteText{
+  color:#fff;
 }
 @media (max-width: 767px) {
   .visible-xs {
