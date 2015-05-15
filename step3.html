@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How-To Guide for the DailyMed API</title>
+    <!-- Latest compiled and minified CSS -->
+    
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/monokai.css">
+    </head>
+
+  <body>
+
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">DailyMed API How-To</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"></span> Guide <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">Nav header</li>
+                  <li><a href="#">Separated link</a></li>
+                  <li><a href="#">One more separated link</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="../navbar/"><span class="glyphicon glyphicon-user"></span> About</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-phone"></span> Contact<b class="caret"></b></a>
+                <ul class="dropdown-menu" id="contact-dropdown">
+                  <form style="margin: 0px" accept-charset="UTF-8" action="/sessions" method="post">
+                    <!--Citation: http://mimi.kaktusteam.de/blog-posts/2012/02/login-menu-with-twitter-bootstrap/00-->
+                    <fieldset class='textbox' style="padding:10px">
+                      <legend>Send Kelvin a Message</legend>
+                      <input style="margin-top: 8px" class="form-control" name="senderName" type="text" placeholder="FirstName LastName" />
+                      <input style="margin-top: 8px" class="form-control" name="senderEmail" type="email" placeholder="Username@Domain.com" />
+                      <textarea style="margin-top: 8px" class="form-control" name="senderMessage" rows="6"></textarea>
+                      <button style="margin-top:8px" class="btn btn-primary" type="submit">Send</button>
+                    </fieldset>
+                  </form>
+                  <button class="btn btn-cancel" data-toggle="collapse" data-target=".nav-collapse">Cancel</button>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+       </div>
+    </div>
+    
+    <div class="container"> 
+      <div class="row">
+        <div class="col-md-8">
+          <h1>Iterating over the Response Array</h1>
+          <h2>JSON Arrays in PHP</h3> 
+          <p>Recall from the last step that we ended up with an XML string as our response. This is because DailyMed's <code>/spl/{SETID}</code> resource does not return JSON. As mentioned previously, most, but not all of the resources return JSON so this particular resource is an exception. In this section of the guide, I will explain how to convert XML to JSON, then I will explain how to iterate over the DailyMed API JSON array using PHP.</p>
+
+          <h2>Converting a XML String to JSON Array</h2>
+          <p>It is simple to convert XML to JSON in PHP. First, we need to convert the XML string to an XML object using the PHP function <code data-language="php">simplexml_load_string</code>. Then, we will encode the resulting XML object to a JSON object, then decode it to an associative array.</p>
+
+          <p id="subIt"><pre><code data-language="php">$xmlObject = simplexml_load_string($xmlString);
+          $jsonObject = json_encode($xmlObject);
+          $jsonArray = json_decode($jsonObject,TRUE);</code></pre>
+
+          <h2>Iterating over the JSON Array</h2>
+          <p>Now that we have the JSON associative array, we can iterate over it. Although outputing the JSON object using var_dump will show us all of the keys and values, it is still quite difficult to read from the browser (even if the Content-Type is set to plain/text is set). Pasting the JSON string into the <a href="codebeautify.org/jsonviewer" target="_blank">CodeBeautify JSON Viewer</a> can make it much easier to find the fields we want to extract.</p>
+
+          <img class="img-responsive" src="images/JSONviewer.jpg">
+
+          <p>As you can see, iterating through this array will not be a simple task, as it is a complex array with nested arrays. More specifically, it is multidimensional, an associative array with nested associative and indexed arrays with no logical pattern. As practice, one could try iterating through the array using the following PHP code to access the indication(s) of atorvastatin, along with its dosage and administration information:</p>
+
+<pre><code data-language="php">foreach($jsonArray as $a=>$b){
+  if($a=='component'){
+    foreach($b as $c=>$d){
+      if($c=='structuredBody'){
+        foreach($d as $key=>$value){
+          if($key=='component'){
+            foreach($value as $e=>$f){
+              if($e==2){
+                foreach($f as $g=>$h){
+                  if($g=='section'){
+                    foreach($h as $i=>$j){
+                      if($i=='title') echo "$j\n";
+                      if($i=='text') foreach($j as $k=>$l) if($k=='paragraph') echo "$l";
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+
+<pre><code data-language="php">foreach($jsonArray as $a=>$b){<br>
+  if($a=='component'){<br>
+    foreach($b as $c=>$d){<br>
+      if($c=='structuredBody'){<br>
+        foreach($d as $key=>$value){<br>
+          if($key=='component'){<br>
+            foreach($value as $e=>$f){<br>
+              if($e==3){<br>
+                foreach($f as $g=>$h){<br>
+                  if($g=='section'){<br>
+          p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreach($h as $i=>$j){<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($i=='title') {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo "\n\n$j\n";<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($i=='excerpt'){<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreach($j as $k=>$l){<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($k=='highlight'){<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreach($l as $m=>$n){<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($m=='text'){<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreach($n as $o=>$p){<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($o=='paragraph'){<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreach($p as $q=>$r){<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo "$r\n";<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+          &nbsp;&nbsp;}<br>
+          }</code></pre>
+
+          <p>Your php page should now look something like this.</p>
+          <p><img src="images/outputINDDOSE.JPG" alt="captureIndicationDosage"></p>
+          <p id="subRec">You've probably noticed how long and drawn out the above code is. While it may be a good practice to iterate through an multidimensional associative array, this approach quickly becomes tiresome, especially if large amounts of data are needed. There must be a better solution that more effectively predicts what the elements are without having to write large amounts of nested foreach loops.
+          
+          <h2>Recursive Iterators?</h2>
+          <p>You may be thinking that using a recursive approach may be helpful for flattening out the nested arrays to make it more predictable to traverse. Let's try this:</p>
+          <pre data-language="php">
+          $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($jsonArray));
+          foreach($iterator as $key=>$value) echo "$key=$value\n";</pre>
+          <p>or more succinctly:</p>
+          <p><code>
+          foreach(new RecursiveIteratorIterator(new RecursiveArrayIterator($jsonArray) as $key=>$value) echo "$key=$value\n";</code></p>
+            
+          <p>The first line defines a new iterator using new RecursiveArrayIterator. However, because the arrays are nested, we need another iterator to recursively iterate over it, that's where the new RecursiveIteratorIterator comes in.  The RecursiveIteratorIterator The effect is to "flatten" out the multidimensional array into a one-dimensional array. This is a portion of the result based on the code above:</p>
+          <p><img src="images/recursiveApproach.png" alt="captureRecursiveApproach"></p>
+          <p>A quick peruse through the result tells us that this is insufficient for our needs. Notice that ID is used on three occasions just in this small snippet alone. However, because we now know that the key names repeat themselves, they are somewhat irrelevant. Let's try a  slight modification to make things even easier to read:</p>
+
+          <p><code>$indexedArray = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($jsonArray)),FALSE);
+          print_r($indexedArray);</code></p>
+          <p>This generates the following output:</p>
+          <p><img src="images/flattenedIndexedArray.png" alt="captureflattenedIndexedArray"></p>
+
+          <p id="subAcc">As the variable names suggest, the code above outputs the more familiar indexed array, which then allows us to access elements easily using an index. While this approach works, the indices are inconsistent between different product labels stored in the API, so this approach is not feasible for multiple searches for different drugs.</p>
+
+          <h2>Accessing Elements in a Multidimensional Array</h2>
+          Because we know the keys and values of the array, we do not need to iterate endlessly to find the values we require. Instead, we can access the same elements in different drug product labels directly. The reason we do not build a one-size-fits-all template to access all of the elements is that on examination of the different product labels, the nesting of elements are often inconsistent, and accessing the same elements for different drugs requires completely different paths.</p>
+          <p>For instance, comparing atorvastatin to amlopidine, their paths for accessing their dosage arrays are quite different.</p>
+          <p><code>$jsonArray['component']['structuredBody']['component'][3]['section']['excerpt']['highlight']['text']['paragraph']</p>
+          <p>$jsonArray2['component']['structuredBody']['component'][2]['section']['component'][0]['section']['text']['paragraph']</code></p> 
+
+          <p>Because paths to similar elements differ inconsistently between medication labels, building a template to access the same elements requires more complex logic.</p>
+          <h2><a href="step3.html">Step 4: Outputting the Response</a></h2> 
+           
+        </div>
+        <div class="col-md-4">
+          <div id="sideMenu">
+            <div class="panel list-group">
+              <a href="#" class="list-group-item" data-toggle="collapse" data-target="#a" data-parent="#menu" style="background: #222; color:#fff;">STEP 1: Getting Started</span><span class="glyphicon glyphicon-asterisk pull-right"></span></a>
+              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is DailyMed?</a>
+              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What are RESTful API's?</a>
+              <a href="step1.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> The DailyMed API</a>
+              <a href="#" class="list-group-item" data-toggle="collapse" data-target="#b" data-parent="#menu" style="background: #222; color:#fff;">STEP 2: Calling the API with PHP</a>
+              <a href="step2.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Your First Request</a>
+              <a href="step2.html#fileGetContents" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Using file_get_contents</a>
+              <a href="step2.html#errorHandling" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Error Handling</a>
+ <a href="#" class="list-group-item" data-toggle="collapse" data-target="#a" data-parent="#menu" style="background: #222; color:#87CEFA;">STEP 3: Iterating over the Response Array</span><span class="glyphicon glyphicon-asterisk pull-right"></span></a>              <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> JSON Arrays in PHP</a>
+              <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Converting a XML String to a JSON Array</a>
+              <a href="step3.html#subIt" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Iterating over a JSON Array</a>
+              <a href="step3.html#subRec" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Recursive Iterators?</a>
+              <a href="step3.html#subAcc" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Accessing Elements in a Multidimensional Array</a>
+              <a href="#" class="list-group-item" data-toggle="collapse" data-target="#d" data-parent="#menu" style="background: #222; color:#fff;">STEP 4: Outputting the Response<span class="glyphicon glyphicon-asterisk pull-right"></span></a>  
+              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is DailyMed?</a>
+              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What are RESTful API's?</a>
+              <a href="step1.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> The DailyMed API</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+          <p class="navbar-text pull-left">Kelvin Watson (OSU ID 932540242)</p>
+        </div>
+      </div>
+
+
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+<script src="js/rainbow.js"></script>
+<script src="js/generic.js"></script>
+<script src="js/php.js"></script>
+ <!-- <script language="javascript">
+    $('.dropdown-toggle').dropdown();
+    $('.dropdown-menu').find('form').click(function (e) {
+        e.stopPropagation();
+      });
+  </script>-->
+  </body>
+</html>
