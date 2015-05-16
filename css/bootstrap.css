@@ -6592,4 +6592,15 @@ button.close {
     display: none !important;
   }
 }
+
+#bgImg{
+  background: url("../images/meds.jpg");
+  background-repeat: no-repeat;
+  background-position: 410px 0px;
+  background-size: 55% 75%;
+}
+figure {
+    text-align: center;
+    margin: 10px auto; /* not needed unless you want centered */
+}
 /*# sourceMappingURL=bootstrap.css.map */
