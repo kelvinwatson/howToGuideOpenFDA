@@ -49,103 +49,35 @@
     <div class="container"> 
       <div class="row">
         <div class="col-md-8">
-          <h1>Outputting in Plain Text</h1>
-          <p>Now, we are finally ready to output the response in a tidy and format. In this step, we discuss two methods of outputting the response from the DailyMed API in PHP.</p>
-          <h2>Outputting as Plain Text</h3> 
-          <p>Before any output is sent, the header must be called. Specifically, the 'Content-Type' lets PHP know what type of content to send to the client. There are many content types you can specify, but in this section, we are speficially interested in plain text. By default, PHP will try to display content as text or HTML. To force content to be plain text only, you can enter this at the beginning of your PHP code:</p>
-<pre><code data-language="php">&lt;?php header('Content-Type: text/plain'); // plain text file</code></pre>
-          <h2>Outputting as HTML</h2>
-          <p>Most of the time, you probably want to display the content of the API response as HTML. To do this, you can enter this instead:</p>
-<pre><code data-language="php">&lt;?php header('Content-Type: text/html; charset=utf-8'); // plain text file</code></pre>
-          <p>Let's suppose we want to create a customized table of medications and related information for a healthcare provider. Following the code in Step 3, we can easily output our response into a table, like this:</p>
-          <figure><a href="images/sampleOutput.png" target="_blank"><img class="img-responsive" src="images/sampleOutput.png" alt="sampleTable"></a><figcaption>Click to enlarge</figcaption></figure>
-          <p>To do this, we could save our response fields in variables instead of simply echoing them out. Adapting our code from step 3 would result the code below. Note that some of the echo statements in Step 3 were done inside foreach loops as some of the JSON elements were arrays.</p>
-<pre><code data-language="php">&lt;?php $componentArr = $jsonObj->component->structuredBody->component;
-foreach($componentArr as $k=>$v){
-  if(property_exists($v->section,'title') && $v->{'section'}->{'title'}=='1 INDICATIONS AND USAGE'){
-    if(property_exists($v->{'section'},'text') && property_exists($v->{'section'}->{'text'},'paragraph')) {
-      $medIndication = $v->{'section'}->{'text'}->{'paragraph'};
-    }
-  }
-
-$medDosages = array();
-  if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='2 DOSAGE AND ADMINISTRATION'){
-    if(property_exists($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'},'paragraph')) {
-      foreach($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'}->{'paragraph'} as $v1){
-        $medDosages[] = $v1;
-      };
-    }
-  }
-
-if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='3 DOSAGE FORMS AND STRENGTHS'){
-    if(property_exists($v->{'section'},'text') && property_exists($v->{'section'}->{'text'},'paragraph')){
-      $medForm = $v->{'section'}->{'text'}->{'paragraph'};
-    }
-  }
-
-$medContraindications = array();
-if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='4 CONTRAINDICATIONS'){
-  if(property_exists($v->{'section'}->{'excerpt'}->{'highlight'},'text')){
-      foreach($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'}->{'paragraph'} as $v2){
-        $medContraindications[] = $v2;
-      }
-  }
-}
-
-$medWarnings = array();
-if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='5 WARNINGS AND PRECAUTIONS'){
-  if(property_exists($v->{'section'}->{'excerpt'}->{'highlight'},'text')){
-      foreach($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'}->{'paragraph'} as $v2){
-        $medWarnings[] = $v2;
-      }
-  }
-}
-
-$medSideEffects = array();
-if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='6 ADVERSE REACTIONS'){
-  if(property_exists($v->{'section'}->{'excerpt'}->{'highlight'},'text')){
-      foreach($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'}->{'paragraph'} as $v2){
-        $medSideEffects = $v2;
-      }
-  }
-}
-?&gt;
-</code></pre>
-<p>Once all variables are saved, they can be echo'ed into an HTML table:</p>
-
-<pre><code data-language="html"><table border="1">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Form</th>
-      <th>Indications/Usage</th>
-      <th>Contraindications</th>
-      <th>Adverse Effects</th>
-      <th>Dosage</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>&lt;?php echo "ATORVASTATIN CALCIUM"; ?&gt;</td>
-      <td>&lt;?php echo $medForms; ?&gt;</td>
-      <td>&lt;?php echo $medIndication; ?&gt;</td>
-      <td>&lt;?php foreach($medContraindications as $ci) echo "$ci\n"; ?&gt;</td>
-      <td>&lt;?php foreach($medSideEffects as $se) echo "$se\n"; ?&gt;</td>
-      <td>&lt;?php foreach($medDosages as $ds) echo "$ds\n"; ?&gt;</td>
-    </tr>
-    <tr>
-      <!--add other medications here-->
-    </tr>
-  </tbody>
-</table></code></pre>
-
-
-          <h2></h2>
-          <p>Once you're satisfied with the structure and content output, you can apply CSS styling to the HTML markup sent back to the browser from PHP.</p>
-
-          <p>Now that you understand how to access the DailyMed API and process its responses, let's look at some of the advantages and disadvantages of the DailyMed API.</p>
-          <h2><a href="step5.html">&raquo; Proceed to Step 5: Advantages and Limitations of the DailyMed API</a></h2> 
-           
+          <h1>References/Sources</h1>
+          <h2>Citations</h2>
+          <ol>
+            <li><a href="http://en.wikipedia.org/wiki/Web_API" target="_blank">http://en.wikipedia.org/wiki/Web_API</a></li>
+            <li><a href="http://readwrite.com/2013/09/19/api-defined" target="_blank">http://readwrite.com/2013/09/19/api-defined</li>
+            <li><a href="http://code.tutsplus.com/tutorials/a-beginners-guide-to-http-and-rest--net-16340" target="_blank">http://code.tutsplus.com/tutorials/a-beginners-guide-to-http-and-rest--net-16340</a></li>
+            <li><a href="http://www.drdobbs.com/web-development/restful-web-services-a-tutorial/240169069" target="_blank">http://www.drdobbs.com/web-development/restful-web-services-a-tutorial/240169069</a></li>
+            <li><a href="http://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">http://en.wikipedia.org/wiki/Representational_state_transfer</a></li>
+            <li><a href="http://code.tutsplus.com/tutorials/a-beginners-guide-to-http-and-rest--net-16340" target="_blank">http://code.tutsplus.com/tutorials/a-beginners-guide-to-http-and-rest--net-16340</a></li>
+            <li><a href="http://stackoverflow.com/questions/25970872/file-get-contents-vs-curl-which-is-more-relevant-and-secure" target="_blank">http://stackoverflow.com/questions/25970872/file-get-contents-vs-curl-which-is-more-relevant-and-secure</a></li>
+            <li><a href="https://mdb9.wordpress.com/2011/03/06/file_get_contents-vs-curl-what-has-better-performance/" target="_blank">https://mdb9.wordpress.com/2011/03/06/file_get_contents-vs-curl-what-has-better-performance/</a></li>
+            <li><a href="http://webtutsdepot.com/2009/08/31/how-to-read-json-data-with-php/" target="_blank">http://webtutsdepot.com/2009/08/31/how-to-read-json-data-with-php/</a></li>
+            <li><a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes" target="_blank">http://en.wikipedia.org/wiki/List_of_HTTP_status_codes</a></li>
+            <li><a href="http://www.w3.org/Protocols/HTTP/HTRESP.html" target="_blank">http://www.w3.org/Protocols/HTTP/HTRESP.html</a></li>
+            <li><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank">http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html</a></li>
+            <li><a href="http://stackoverflow.com/questions/1319903/how-to-flatten-a-multidimensional-array" target="_blank">http://stackoverflow.com/questions/1319903/how-to-flatten-a-multidimensional-array</a></li>
+            <li><a href="http://stackoverflow.com/questions/526556/how-to-flatten-a-multi-dimensional-array-to-simple-one-in-php" target="_blank">http://stackoverflow.com/questions/526556/how-to-flatten-a-multi-dimensional-array-to-simple-one-in-php</a></li>
+            <li><a href="http://www.phpro.org/examples/Flatten-Array.html" target="_blank">http://www.phpro.org/examples/Flatten-Array.html</a></li>
+            <li><a href="http://php.net/manual/en/recursiveiteratoriterator.construct.php" target="_blank">http://php.net/manual/en/recursiveiteratoriterator.construct.php</a></li>
+            <li><a href="http://schoolsofweb.com/how-to-flatten-or-convert-a-multidimensional-array-into-a-simple-one-in-php/" target="_blank">http://schoolsofweb.com/how-to-flatten-or-convert-a-multidimensional-array-into-a-simple-one-in-php/</a></li>
+            <li><a href="http://www.cowburn.info/2012/03/17/flattening-a-multidimensional-array-in-php/" target="_blank">http://www.cowburn.info/2012/03/17/flattening-a-multidimensional-array-in-php/</a></li>
+          </ol>
+          <h2>Design Elements/Source Code</h2>
+          <ol>
+            <li><a href="http://mimi.kaktusteam.de/blog-posts/2012/02/login-menu-with-twitter-bootstrap/00" target="_blank">http://mimi.kaktusteam.de/blog-posts/2012/02/login-menu-with-twitter-bootstrap/00</a></li>
+            <li><a href="http://www.bootply.com/uBoT3zP1P2" target="_blank">http://www.bootply.com/uBoT3zP1P2</a></li>
+            <li><a href="http://www.bootply.com/tGF9MEGbLM" target="_blank">http://www.bootply.com/tGF9MEGbLM/</a></li>
+            <li><a href="https://craig.is/making/rainbows" target="_blank">https://craig.is/making/rainbows</a></li>
+          </ol>
         </div>
         <div class="col-md-4">
           <div id="sideMenu">
@@ -159,13 +91,13 @@ if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='6 AD
               <a href="step2.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Your First Request</a>
               <a href="step2.html#fileGetContents" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Using file_get_contents</a>
               <a href="step2.html#errorHandling" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Error Handling</a>
-              <a href="step3.html" class="list-group-item" style="background: #222; color:#fff;">STEP 3: Iterating over the Response Array</span><span class="glyphicon glyphicon-asterisk pull-right"></span></a>              
+              <a href="step3.html" class="list-group-item" style="background: #222; color:#fff;">STEP 3: Iterating over the Response Array</span></a>
               <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> JSON Arrays in PHP</a>
               <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Converting a XML String to a JSON Array</a>
               <a href="step3.html#subIt" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Iterating over a JSON Array</a>
               <a href="step3.html#subRec" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Recursive Iterators</a>
               <a href="step3.html#subAcc" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Accessing Elements in a Multidimensional Array</a>
-              <a href="#" class="list-group-item" style="background: #222; color:#87cefa;">STEP 4: Outputting the Response</span><span class="glyphicon glyphicon-asterisk pull-right"></span></a>  
+              <a href="step4.html" class="list-group-item" style="background: #222; color:#fff;">STEP 4: Outputting the Response</span></a>  
               <a href="step4.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Outputting in Plain Text</a>
               <a href="step4.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Outputting to HTML</a>
               <a href="step5.html" class="list-group-item" style="background: #222; color:#fff;">STEP 5: Examining the DailyMed API</a>  

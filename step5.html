@@ -49,103 +49,45 @@
     <div class="container"> 
       <div class="row">
         <div class="col-md-8">
-          <h1>Outputting in Plain Text</h1>
-          <p>Now, we are finally ready to output the response in a tidy and format. In this step, we discuss two methods of outputting the response from the DailyMed API in PHP.</p>
-          <h2>Outputting as Plain Text</h3> 
-          <p>Before any output is sent, the header must be called. Specifically, the 'Content-Type' lets PHP know what type of content to send to the client. There are many content types you can specify, but in this section, we are speficially interested in plain text. By default, PHP will try to display content as text or HTML. To force content to be plain text only, you can enter this at the beginning of your PHP code:</p>
-<pre><code data-language="php">&lt;?php header('Content-Type: text/plain'); // plain text file</code></pre>
-          <h2>Outputting as HTML</h2>
-          <p>Most of the time, you probably want to display the content of the API response as HTML. To do this, you can enter this instead:</p>
-<pre><code data-language="php">&lt;?php header('Content-Type: text/html; charset=utf-8'); // plain text file</code></pre>
-          <p>Let's suppose we want to create a customized table of medications and related information for a healthcare provider. Following the code in Step 3, we can easily output our response into a table, like this:</p>
-          <figure><a href="images/sampleOutput.png" target="_blank"><img class="img-responsive" src="images/sampleOutput.png" alt="sampleTable"></a><figcaption>Click to enlarge</figcaption></figure>
-          <p>To do this, we could save our response fields in variables instead of simply echoing them out. Adapting our code from step 3 would result the code below. Note that some of the echo statements in Step 3 were done inside foreach loops as some of the JSON elements were arrays.</p>
-<pre><code data-language="php">&lt;?php $componentArr = $jsonObj->component->structuredBody->component;
-foreach($componentArr as $k=>$v){
-  if(property_exists($v->section,'title') && $v->{'section'}->{'title'}=='1 INDICATIONS AND USAGE'){
-    if(property_exists($v->{'section'},'text') && property_exists($v->{'section'}->{'text'},'paragraph')) {
-      $medIndication = $v->{'section'}->{'text'}->{'paragraph'};
-    }
-  }
-
-$medDosages = array();
-  if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='2 DOSAGE AND ADMINISTRATION'){
-    if(property_exists($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'},'paragraph')) {
-      foreach($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'}->{'paragraph'} as $v1){
-        $medDosages[] = $v1;
-      };
-    }
-  }
-
-if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='3 DOSAGE FORMS AND STRENGTHS'){
-    if(property_exists($v->{'section'},'text') && property_exists($v->{'section'}->{'text'},'paragraph')){
-      $medForm = $v->{'section'}->{'text'}->{'paragraph'};
-    }
-  }
-
-$medContraindications = array();
-if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='4 CONTRAINDICATIONS'){
-  if(property_exists($v->{'section'}->{'excerpt'}->{'highlight'},'text')){
-      foreach($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'}->{'paragraph'} as $v2){
-        $medContraindications[] = $v2;
-      }
-  }
-}
-
-$medWarnings = array();
-if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='5 WARNINGS AND PRECAUTIONS'){
-  if(property_exists($v->{'section'}->{'excerpt'}->{'highlight'},'text')){
-      foreach($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'}->{'paragraph'} as $v2){
-        $medWarnings[] = $v2;
-      }
-  }
-}
-
-$medSideEffects = array();
-if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='6 ADVERSE REACTIONS'){
-  if(property_exists($v->{'section'}->{'excerpt'}->{'highlight'},'text')){
-      foreach($v->{'section'}->{'excerpt'}->{'highlight'}->{'text'}->{'paragraph'} as $v2){
-        $medSideEffects = $v2;
-      }
-  }
-}
-?&gt;
-</code></pre>
-<p>Once all variables are saved, they can be echo'ed into an HTML table:</p>
-
-<pre><code data-language="html"><table border="1">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Form</th>
-      <th>Indications/Usage</th>
-      <th>Contraindications</th>
-      <th>Adverse Effects</th>
-      <th>Dosage</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>&lt;?php echo "ATORVASTATIN CALCIUM"; ?&gt;</td>
-      <td>&lt;?php echo $medForms; ?&gt;</td>
-      <td>&lt;?php echo $medIndication; ?&gt;</td>
-      <td>&lt;?php foreach($medContraindications as $ci) echo "$ci\n"; ?&gt;</td>
-      <td>&lt;?php foreach($medSideEffects as $se) echo "$se\n"; ?&gt;</td>
-      <td>&lt;?php foreach($medDosages as $ds) echo "$ds\n"; ?&gt;</td>
-    </tr>
-    <tr>
-      <!--add other medications here-->
-    </tr>
-  </tbody>
-</table></code></pre>
-
-
-          <h2></h2>
-          <p>Once you're satisfied with the structure and content output, you can apply CSS styling to the HTML markup sent back to the browser from PHP.</p>
-
-          <p>Now that you understand how to access the DailyMed API and process its responses, let's look at some of the advantages and disadvantages of the DailyMed API.</p>
-          <h2><a href="step5.html">&raquo; Proceed to Step 5: Advantages and Limitations of the DailyMed API</a></h2> 
-           
+          <h1>Examining the DailyMed API</h1>
+          <h2>Advantages of the DailyMed API</h3> 
+          <p>Having spent some time using the DailyMed API, let's discuss some of the positive aspects of the DailyMed API.</p>
+          <dl>
+            <dt>Comprehensive</dt>
+            <dd>DailyMed is the official provider of FDA labelling so it maintains a large database of package information.<br><br></dd>
+            <dt>Great for Searching for Single Package Inserts</dt>
+            <dd id="limit">You can find all of the package information for a single drug relatively easily by first finding the <a href="https://dailymed.nlm.nih.gov/dailymed/webservices-help/v2/spls.json?drug_name=ciprofloxacin" target="_blank">setID</a> using the spls resource and querying a drug name (e.g. https://dailymed.nlm.nih.gov/dailymed/webservices-help/v2/spls/, then entering the desired set ID into <a href="https://dailymed.nlm.nih.gov/dailymed/app-support-web-services.cfm" target="_blank">/spls/{SETID}</a> resource.</dd>
+          </dl>
+          <h2>Limitations of the DailyMed API</h3> 
+          <p>While the API has some great information, there are definitely some downsides. </p>
+          <dl>
+            <dt>/spl/{SETID} Resouce Returns XML Only</dt>
+            <dd>Not all of the resources return JSON. Some only return XML.<br><br></dd>
+            <dt>Inconsistency between drug labels</dt>
+            <dd>Medication labels are notorious for being inconsistent between medications with regards to their sections, content and level of detail of that content. Because the basis of the DailyMed API are these fields, the returned results can be difficult to interpret, and particular fields difficult to access.<br><br></dd>
+            <dt>Multiple nested arrays</dt>
+            <dd>The multiple nested arrays in the JSON response make accessing particular fields of interest especially difficult. This disadvantage is an extension of the one above. The vast difference between drug labels makes it almost impossible to predict whether certain object/array keys exist for a particular medication, or where to find a value for an existing key. Complicating this is the inconsistency of the indexing of the arrays which differ between drugs, the nested arrays within nested arrays which also differ between drugs and the fact that the content fields of the label headers are often located in very different locations within the same array index. These inconsistencies are illustrated in the figures below: </dd>
+            <figure>
+            <table class="small">
+              <tr>
+                <td><br><img src="images/glimepirideDOSE.png" alt="glimepirideArrayNesting"></td>
+                <td><br><img src="images/metforminDOSE.png" alt="metforminArrayNesting"></td>
+              </tr>
+              <tr>
+                <td align="left">In the glimepiride labelling, dosage and administration is found under the key "title" within the section object that is within array element 2 within the component array, which is in turn nested within a structuredBody object, which is in turn nested within another object named component.</td>
+                <td align="left">In the metformin labelling, dosage and administration is not found until array element 9 within the component array, which is in turn nested within a structuredBody object, which is in turn nested within another object named component. However, the actual text "DOSAGE AND ADMINISTRATION" is embedded further within a title object. which did not exist in the glimepride label.</td>
+              </tr>
+              <tr>
+                <td><br><img src="images/glimepirideDOSE2.png" alt="glimepirideArrayNesting2"></td>
+                <td><br><img src="images/metforminDOSE2.png" alt="metforminArrayNesting2"></td>
+              </tr>
+              <tr>
+                <td align="left">The above is a continuation of the glimepiride JSON object. The dosage text is nested multiple levels deep within within the excerpt object.</td>
+                <td align="left">Metformin's label is organized quite differently, with a section called "General Considerations" before the dosage is actually encountered.</td>
+              </tr>
+            </table>
+            </figure>
+            <dd><br>Taken together, these differences make accessing specific information difficult without considerable logic to extract these fields.</dd>
         </div>
         <div class="col-md-4">
           <div id="sideMenu">
@@ -159,16 +101,16 @@ if(property_exists($v->{'section'},'title') && $v->{'section'}->{'title'}=='6 AD
               <a href="step2.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Your First Request</a>
               <a href="step2.html#fileGetContents" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Using file_get_contents</a>
               <a href="step2.html#errorHandling" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Error Handling</a>
-              <a href="step3.html" class="list-group-item" style="background: #222; color:#fff;">STEP 3: Iterating over the Response Array</span><span class="glyphicon glyphicon-asterisk pull-right"></span></a>              
+              <a href="step3.html" class="list-group-item" style="background: #222; color:#fff;">STEP 3: Iterating over the Response Array</span></a>
               <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> JSON Arrays in PHP</a>
               <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Converting a XML String to a JSON Array</a>
               <a href="step3.html#subIt" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Iterating over a JSON Array</a>
               <a href="step3.html#subRec" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Recursive Iterators</a>
               <a href="step3.html#subAcc" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Accessing Elements in a Multidimensional Array</a>
-              <a href="#" class="list-group-item" style="background: #222; color:#87cefa;">STEP 4: Outputting the Response</span><span class="glyphicon glyphicon-asterisk pull-right"></span></a>  
+              <a href="step4.html" class="list-group-item" style="background: #222; color:#fff;">STEP 4: Outputting the Response</span></a>  
               <a href="step4.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Outputting in Plain Text</a>
               <a href="step4.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Outputting to HTML</a>
-              <a href="step5.html" class="list-group-item" style="background: #222; color:#fff;">STEP 5: Examining the DailyMed API</a>  
+              <a href="step5.html" class="list-group-item" style="background: #222; color:#87cefa;">STEP 5: Examining the DailyMed API<span class="glyphicon glyphicon-asterisk pull-right"></span></a>  
               <a href="step5.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Advantages of the DailyMed API</a>
               <a href="step5.html#limit" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Limitations of the DailyMed API</a>
             </div>

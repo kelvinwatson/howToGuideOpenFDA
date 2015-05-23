@@ -20,40 +20,26 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="index.html"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+            <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"></span> Guide <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li class="dropdown-header">The Guide</li>
-                <li><a href="#">Step 1: Getting Started</a></li>
-                <li><a href="#">Step 2: Calling the API</a></li>
-                <li><a href="#">Step 3: Iterating over the Response</a></li>
-                <li><a href="#">Step 4: Outputting the Response</a></li>
+                <li><a href="step1.html">Step 1: Getting Started</a></li>
+                <li><a href="step2.html">Step 2: Calling the API</a></li>
+                <li><a href="step3.html">Step 3: Iterating over the Response</a></li>
+                <li><a href="step4.html">Step 4: Outputting the Response</a></li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Other</li>
-                <li><a href="#">References/Citations</a></li>
+                <li><a href="ref.html">References/Further Reading</a></li>
+                <li><a href="auth.html">About the webpage author</a></li>
               </ul>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="../navbar/"><span class="glyphicon glyphicon-user"></span> About</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-phone"></span> Contact<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <form style="margin: 0px" accept-charset="UTF-8" action="/sessions" method="post">
-                  <div style="margin:0; padding:0; display:inline">
-                    <input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="4L/A2ZMYkhTD3IiNDMTuB/fhPRvyCNGEsaZocUUpw40=" />
-                  </div>
-                  <fieldset class='textbox' style="padding:10px">
-                    <input style="margin-top: 8px" type="text" placeholder="Username" />
-                    <input style="margin-top: 8px" type="password" placeholder="Passsword" />
-                    <input class="btn btn-primary" name="commit" type="submit" value="Log In" />
-                  </fieldset>
-                </form>
-              </ul>
-            </li>
+            <li><a href="auth.html"><span class="glyphicon glyphicon-user"></span> About</a></li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </div>
     
@@ -61,74 +47,52 @@
       <div class="row">
         <div class="col-md-8 jumbotron" id="bgImg">
           <h1>DailyMed API<br>How-To Guide</h1>
-          <h3>This guide will show you will learn how to access the DailyMed API using PHP</h3> 
-          <p><a href="#" class="btn btn-default">Let's Get Started &raquo;</a></p>
+          <h3>This guide will show you will learn how to access the DailyMed API using PHP</h3>
+          <dl>
+            <dt><br><br>Features</dt>
+            <dd>This guide will show you how to access the DailyMed API using PHP.<br><br></dd>
+            <dt>Documentation</dt>
+            <dd>Where appropriate, this guide will link to official documentation to provide background information.<br><br></dd>
+            <dt>Requirements</dt>
+            <dd>This guide assumes basic knowledge of the PHP language, and that you have a web host/server with PHP support.<br><br></dd>
+          </dl>
+          <p><a href="step1.html" class="btn btn-primary">Let's Get Started &raquo;</a></p>
         </div>
         <div class="col-md-4">
           <div id="sideMenu">
             <div class="panel list-group">
-              <a href="step1.html" class="list-group-item" data-toggle="collapse" data-target="#a" data-parent="#menu" style="background: #222; color:#87CEFA;">STEP 1: Getting Started</span><span class="glyphicon glyphicon-asterisk pull-right"></span></a>
-              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is DailyMed?</a>
-              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What are RESTful API's?</a>
+              <a href="step1.html" class="list-group-item" style="background: #222; color:#fff;">STEP 1: Getting Started</span></a>
+              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is an API</a>
+              <a href="step1.html#rest" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What are RESTful API's?</a>
+              <a href="step1.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is DailyMed?</a>
               <a href="step1.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> The DailyMed API</a>
-              <a href="step2.html" class="list-group-item" data-toggle="collapse" data-target="#b" data-parent="#menu" style="background: #222; color:#fff;">STEP 2: Calling the API with PHP</a>
+              <a href="step2.html" class="list-group-item" style="background: #222; color:#fff;">STEP 2: Calling the API with PHP</a>
               <a href="step2.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Your First Request</a>
               <a href="step2.html#fileGetContents" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Using file_get_contents</a>
               <a href="step2.html#errorHandling" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Error Handling</a>
-              <a href="step3.html" class="list-group-item" data-toggle="collapse" data-target="#c" data-parent="#menu" style="background: #222; color:#fff;">STEP 3: Iterating over the Response Array</a>  
+              <a href="step3.html" class="list-group-item" style="background: #222; color:#fff;">STEP 3: Iterating over the Response Array</span></a>
               <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> JSON Arrays in PHP</a>
               <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Converting a XML String to a JSON Array</a>
-              <a href="step3.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Iterating over a JSON Array</a>
-              <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Recursive Iterators?</a>
-              <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Accessing Elements in a Multidimensional Array</a>
-              <a href="step4.html" class="list-group-item" data-toggle="collapse" data-target="#d" data-parent="#menu" style="background: #222; color:#fff;">STEP 4: Outputting the Response<span class="glyphicon glyphicon-asterisk pull-right"></span></a>  
-              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is DailyMed?</a>
-              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What are RESTful API's?</a>
-              <a href="step1.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> The DailyMed API</a>
+              <a href="step3.html#subIt" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Iterating over a JSON Array</a>
+              <a href="step3.html#subRec" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Recursive Iterators</a>
+              <a href="step3.html#subAcc" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Accessing Elements in a Multidimensional Array</a>
+              <a href="step4.html" class="list-group-item" style="background: #222; color:#fff;">STEP 4: Outputting the Response</span></a>  
+              <a href="step4.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Outputting in Plain Text</a>
+              <a href="step4.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Outputting to HTML</a>
+              <a href="step5.html" class="list-group-item" style="background: #222; color:#fff;">STEP 5: Examining the DailyMed API</a>  
+              <a href="step5.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Advantages of the DailyMed API</a>
+              <a href="step5.html#limit" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Limitations of the DailyMed API</a>
             </div>
           </div>
         </div>
       </div>
-
-
-      <div class="row">
-        <div class="col-md-4">
-          <h3>Features of this Guide</h1>
-          <p>This guide will show you how to access the DailyMed API using PHP.</p> 
-        </div>
-        <div class="col-md-4">
-          <h3>Documentation</h1>
-          <p>Where appropriate, this guide will link to official documentation to provide background information.</p> 
-        </div>
-        <div class="col-md-4">
-          <h3>Requirements</h1>
-          <p>This guide assumes minimal basic knowledge of PHP.</p> 
-        </div>
-      </div>
-
-
       <div class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
           <p class="navbar-text pull-left">Kelvin Watson (OSU ID 932540242)</p>
         </div>
       </div>
-
-
-      <!--<hr>
-      <div class="footer">
-      <p>&copy; 2015</p>
-      </div>-->
     </div>
-
-   
-
-  <script src="https://code.jquery.com/jquery.js"></script>
-  <script src="js/bootstrap.min.js"></script>
- <!-- <script language="javascript">
-    $('.dropdown-toggle').dropdown();
-    $('.dropdown-menu').find('form').click(function (e) {
-        e.stopPropagation();
-      });
-  </script>-->
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
   </body>
 </html>

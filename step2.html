@@ -28,32 +28,19 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th-list"></span> Guide <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li class="dropdown-header">The Guide</li>
-                  <li><a href="#">Step 1: Getting Started</a></li>
-                  <li><a href="#">Step 2: Calling the API</a></li>
-                  <li><a href="#">Step 3: Iterating over the Response</a></li>
-                  <li><a href="#">Step 4: Outputting the Response</a></li>
+                  <li><a href="step1.html">Step 1: Getting Started</a></li>
+                  <li><a href="step2.html">Step 2: Calling the API</a></li>
+                  <li><a href="step3.html">Step 3: Iterating over the Response</a></li>
+                  <li><a href="step4.html">Step 4: Outputting the Response</a></li>
                   <li class="divider"></li>
                   <li class="dropdown-header">Other</li>
-                  <li><a href="#">References/Citations</a></li>
+                  <li><a href="ref.html">References/Further Reading</a></li>
+                  <li><a href="auth.html">About the webpage author</a></li>                 
                 </ul>
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="../navbar/"><span class="glyphicon glyphicon-user"></span> About</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-phone"></span> Contact<b class="caret"></b></a>
-                <ul class="dropdown-menu" id="contact-dropdown">
-                  <form style="margin: 0px" accept-charset="UTF-8" action="/sessions" method="post">
-                    <fieldset style="padding:8px">
-                      <legend>Send Kelvin a Message</legend>
-                      <input style="margin-top: 8px" class="form-control" name="senderName" type="text" placeholder="FirstName LastName" />
-                      <input style="margin-top: 8px" class="form-control" name="senderEmail" type="email" placeholder="Username@Domain.com" />
-                      <textarea style="margin-top: 8px" class="form-control" name="senderMessage" rows="6"></textarea>
-                      <button style="margin-top:8px" class="btn btn-primary" type="submit">Send</button>
-                    </fieldset>
-                  </form>
-                </ul>
-              </li>
+              <li><a href="auth.html"><span class="glyphicon glyphicon-user"></span> About</a></li>
             </ul>
           </div><!--/.nav-collapse -->
        </div>
@@ -64,12 +51,12 @@
         <div class="col-md-8">
           <h1>Calling the DailyMed API with PHP</h1>
           <h2>Your First REST Request to the DailyMed API</h3> 
-          <p>There are two ways to access the DailyMed API using PHP. The requirements, pro's and con's of each method are listed below:</p>
+          <p>Recall from the last step that DailyMed API only supports the HTTP method GET. There are two ways to access the DailyMed API using PHP. We can either use <code><a href="http://php.net" target="_blank">file_get_contents</a></code>, or the Client URL, or <a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a> Library. The requirements, pro's and con's of each method are listed below:</p>
           <table border="1" class="table">
             <thead>
               <tr>
                 <th>Method</th>
-                <th>Requirements</th>
+                <th>System Requirements</th>
                 <th>Pro's</th>
                 <th>Con's</th>
                 <th>Further Reading</th>
@@ -80,7 +67,7 @@
               <td><ul><li>PHP 4.3 or later</li><li>allow_url_fopen must be enabled</li></ul></td>
               <td><ul><li>simpler</li><li>good for short scripts</li></ul></td>
               <td><ul><li>GET requests only, cannot perform POST calls</li><li>slower than cURL</li></td>
-              <td><a href="http://php.net/manual/en/function.file-get-contents.php" target="_blank">PHP.net</a></td>
+              <td><a href="http://php.net/manual/en/function.file-get-contents.php" target="_blank">PHP.net manual</a></td>
             </tr>
             <tr>
               <th>cURL library</th>
@@ -91,8 +78,9 @@
             </tr>
           </table>
           <a name="fileGetContents"></a>
-          <p>The decision to use either of the above remains with the user. However, you will need to ensure that the above requirements are met. You can check that your setup meets the requirements by including the following in your PHP code:</p>
+          <p>The decision to use either of the above remains with the user. Whichever method you chose, you will need to ensure that the above system requirements are met. You can check that your setup meets the requirements by including the following in your PHP code:</p>
           <pre><code data-language="php">&lt;?php &nbsp;echo phpinfo();?&gt;</code></pre>
+          <p>Calling<code><a href="http://php.net/manual/en/function.phpinfo.php" target="_blank">phpinfo</a></code> outputs information about your current PHP configuration.</p>
           <h2>Using file_get_contents</h2>
           <p>We will be using <code data-language="php">file_get_contents</code> as it is simpler, and is sufficient for the GET calls in this guide.</p>
           <p>To start, we will include the following code:</p>
@@ -102,26 +90,27 @@ ini_set('display_errors',1);
 header('Content-type: text/plain');
 ?&gt;</code></pre>
           <p><aside><em>Note that <code data-language="php">Content-type: text/plain</code> is used at this stage in order to quickly test the output of the resource without entering HTML. In subsequent steps, we will use HTML to illustrate how to output the contents of the response.</em></aside></p>
-          <p>Finally, we are ready to make our first call. Consider the following scenario: You are a pharmacist, and a patient asks you for label information about atorvastatin, a drug used in the treatment of high cholesterol:</p>
-          <p>First, we need to know what the base URI for the API is. This serves as our entry point:<br>
+          <p>Finally, we are ready to make our first call. Consider the following scenario:</p> 
+          <blockquote>You are an information systems pharmacist, and one of your responsibilities is procurring drug information from databases for your colleagues. Today, you receive a request from one of your staff pharmacists for label information about atorvastatin, a drug used in the treatment of high cholesterol. Specifically, you are asked for the approved indications (what usages the medication is approved for), contraindications (under what circumstances regarding the patient the drug should not be used),  :</blockquote>
+          <p>First, we need to know what the <a href="http://www.dailymed.nlm.nih.gov/dailymed/app-support-web-services.cfm" target="_blank">base URI for the DailyMed API</a> is. This serves as our entry point:<br>
           <pre><code data-language="php">$baseURI = 'http://dailymed.nlm.nih.gov/dailymed/services/v2/';</code></pre>
           <p>To facilitate explanation, I've separated the different parts of the request, then concatenated them prior to the call. This allows the code to be reused for subsequent calls to the API.</p>
-          <p>Because we know that we want to retrieve a product label (SPL, or Structured Product Labeling), we will use the <code data-language="php">/spls</code> resource:</p>
-<pre><code data-language="php">$resource = 'spls;</code></pre>         
-          <p>This resouce returns either an XML or a JSON string. For this request, we will ask that the API return JSON:</p>
+          <p>Now, what resource do we need? A <a href="http://www.dailymed.nlm.nih.gov/dailymed/webservices-help/v2/spls_api.cfm" target="_blank">full list</a> of resources can be found on DailyMed's RESTful resources page. Because we know that we want to retrieve a product label (SPL, or Structured Product Labeling), we will use the <code><a href="http://www.dailymed.nlm.nih.gov/dailymed/webservices-help/v2/spls_api.cfm" target="_blank">/spls</a></code> resource:</p>
+<pre><code data-language="php">$resource = 'spls';</code></pre>         
+          <p>This resouce returns either an XML or a JSON string representation. For this request, we will ask that the API return JSON:</p>
 <pre><code data-language="php">$format = '.json';</code></pre>
-          <p>Next, we will need to specify a query parameter. Although this filter is optional, we do not want to retrieve all SPL's. We only want to retrieve SPL's containing the drug name 'atorvastatin':</p> 
+          <p>Next, we will need to specify a query parameter. Although this filter is optional, we do not want to retrieve SPL's for all medications. We only want to retrieve the SPL's containing the drug name 'atorvastatin':</p> 
 <pre><code data-language="php">$predicate = '?drug_name=';
 $expression = 'atorvastatin';</code></pre>
           <p>Now, we can concatenate the above and make our call:</p>
 <pre><code data-language="php">$request = $baseURI .$resource .$predicate .$expression;
 $jsonString = file_get_contents($request);</code></pre>
           <p>Note that the above call is equivalent to <pre><code data-language="php">$request = 'http://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json?drug_name=atorvastatin';</code></pre> 
-          <p>To check that our call was successful, we can print the result using <code data-language="php">var_dump($jsonString);</code>.</p>
+          <p>To check that our call was successful, we can print the result using <code data-language="php">var_dump($jsonString);</code> or <code>print_r($jsonString)</code>.</p>
           <p>The result should look something like this:</p>
-          <img class="img-responsive" src="images/jsonResponseString.png" alt="captureJSONString">. <p>You may notice that the resulting string is quite difficult to read. Furthermore, in order to work with this data, we need a way to decode this string. Fortunately, PHP has a <code data-language="php">json_decode</code> function for this purpose:</p>
+          <img class="img-responsive" src="images/jsonResponseString.png" alt="captureJSONString">. <p>You may notice that the resulting string is quite difficult to read. Furthermore, in order to work with this data, we need a way to decode this string. Fortunately, PHP has a <code><a href="http://php.net/manual/en/function.json-decode.php" target="_blank">json_decode</a></code> function for this purpose:</p>
 <pre><code data-language="php">$jsonArray = json_decode($jsonString,true);</code></pre>
-          <p>The second argument passed into json_decode is a boolean value. If set to false or left unspecified, the function returns an object. When set to true, the function returns an associative array. In our example, the JSON string has now been converted to an associative array which enables us to work with the data. Notice that it is also much more human readable.</p>
+          <p>The second argument passed into json_decode is a boolean value. If set to false or left unspecified, the function returns an object. When set to true, the function returns an associative array. In our example, the JSON string has now been converted to an associative array which enables us to visualize the data. Notice that it is now much more human readable.</p>
           <a name="errorHandling"></a>
           <img class="img-responsive" src="images/jsonAssociativeArray.png" alt="captureJSONAssociativeArray">.
           <h2>Error Handling</h2>
@@ -136,7 +125,7 @@ switch($status_code){
   default: die('call failed status ' .$status_code);
 }</code></pre>
           <p>Let's go through what the above code does.</p>
-          <p>In the first line of code, the <code data-language="php">$http_response_header</code> is a PHP predefined variable (array) that is automatically set by PHP when file_get_contents is called. The element at index contains the status code. Some relevant HTTP status codes include the following:</p>
+          <p>In the first line of code, the <code><a href="http://php.net/manual/en/reserved.variables.httpresponseheader.php" target="_blank">$http_response_header</a></code> is a PHP predefined variable (array) that is automatically set by PHP when file_get_contents is called. The element at index 0 of the array contains the status code. Some relevant HTTP status codes include the following:</p>
           <table border="1" class="table">
             <thead>
               <tr>
@@ -168,12 +157,13 @@ switch($status_code){
               </tr>
             </tfoot>
           </table>
-          <p>The explode function takes three arguments. The first is the delimiter. In this case, the delimiter is a &lt;space&gt;. The second argument is the input string. In this case, it is the first element of the $http_response_header array, and the third is the number of elements the input string will be split into, with the final element containing the remainder of the string. These split components are, in turn, assigned to a <a href="http://php.net/manual/en/function.list.php" target="_blank">list</a> language construct, which assigns variables into an array.</p>
+          <p>The <code><a href="http://php.net/manual/en/function.explode.php" target="_blank">explode</a></code> function takes three arguments. The first is the delimiter. In this case, the delimiter is a &lt;space&gt;. The second argument is the input string. In this case, it is the first element of the $http_response_header array, and the third is the number of elements the input string will be split into, with the final element containing the remainder of the string. These split components are, in turn, assigned to a <a href="http://php.net/manual/en/function.list.php" target="_blank">list</a> language construct, which assigns variables into an array.</p>
           <p>The switch statement that follows is quite self-explanatory. It takes the status_code as its expression, and if the request was successfully fulfilled by the server, the switch will immediately break and execution of the switch block will exit. Otherwise, the corresponding error message will print.</p>
+          <p>You may notice that although <code>$status_code</code> is actually a string, PHP does something called <a href="http://php.net/manual/en/function.explode.php" target="_blank">"typing juggling"</a> so that the string is actually converted to an integer prior to the comparison with the cases.</p>
           <h2>Check the Response</h2>
           <p>If no errors were detected, then your first call to the DailyMed API was successful. Congratulations! However, before we get too excited, you should notice that the array does not contain the information we are seeking.</p>
           <p>Looking more carefully at the array above, we see that we have obtained an array of arrays containing the SPL version, published date, title and setID keys. However, we do not see any specific label information on the medication. What we want to see are the indications, contraindications, adverse effects, warnings that are usually available in the package insert or product monograph.</p>
-          <p>In this case, we will need to make another call to the API. Looking at the documentation, we can see that we need to make use the resource <code data-language="php">/spls/{SETID}</code> to get specific packaging information. However, we note now that this particular resource only returns XML, and not JSON, so our result will be different. But, not to worry, I will show you how to convert the XML to JSON in the next step.</p>
+          <p>In this case, we will need to make another call to the API. Looking at the documentation, we can see that we need to make use the resource <code><a href="http://dailymed.nlm.nih.gov/dailymed/webservices-help/v2/spls_setid_api.cfm" target="_blank">/spls/{SETID}</a></code> to get specific packaging information. However, we note now that this particular resource only returns XML, and not JSON, so our result will be different. But, not to worry, I will show you how to convert the XML to JSON in the next step.</p>
 
           <p>We will pick a setID (for example, the first one: 6d203e05-1fe6-4262-9d66-b461f84c4672) for the call. Following the format of the previous call:</p>
 <pre><code data-language="php">$baseURI = 'http://dailymed.nlm.nih.gov/dailymed/services/v2/';
@@ -189,38 +179,41 @@ switch($status_code){
   case 200: break; //success
   case 503: die('call failed status 503'); break;
   case 403: die('call failed status 403'); break;
-  case 400: die('call failed status 400'); break;>
+  case 400: die('call failed status 400'); break;
   default: die('call failed status ' .$status_code);
 }
 
-var_dump($xmlString); //print the JSON response string
+var_dump($xmlString); //print the XML response to verify response received
 $jsonArray = json_decode($jsonString,TRUE);//TRUE converts JSON string JSON array instead of an object</code></pre>
           <p>You should have received a response similar to this:</p>
-          <img class="img-responsive" src="images/splXML.png" alt="captureXMLResponse">.
+          <figure><a href="images/splXML.png" target="_blank"><img class="img-responsive" src="images/splXML.png" alt="captureXMLResponse"></a><figcaption>Click to enlarge</figcaption></figure>
           <p>You should note that we have received a response in XML format. Now, we are ready to proceed to the next step.</p>
-          <h2><a href="step3.html">Step 3: Iterating over the Response Array</a></h2> 
+          <h2><a href="step3.html">&raquo; Proceed to Step 3: Iterating over the Response Array</a></h2> 
         </div>
         <div class="col-md-4">
           <div id="sideMenu">
             <div class="panel list-group">
-              <a href="step1.html" class="list-group-item" data-toggle="collapse" data-target="#a" data-parent="#menu" style="background: #222; color:#fff;">STEP 1: Getting Started</span></a>
-              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is DailyMed?</a>
-              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What are RESTful API's?</a>
+              <a href="step1.html" class="list-group-item" style="background: #222; color:#fff;">STEP 1: Getting Started</span></a>
+              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is an API</a>
+              <a href="step1.html#rest" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What are RESTful API's?</a>
+              <a href="step1.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is DailyMed?</a>
               <a href="step1.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> The DailyMed API</a>
-              <a href="step2.html" class="list-group-item" data-toggle="collapse" data-target="#b" data-parent="#menu"  style="background: #222; color:#87CEFA;">STEP 2: Calling the API with PHP<span class="glyphicon glyphicon-asterisk pull-right"></span></a>
+              <a href="#" class="list-group-item" style="background: #222; color:#87cefa;">STEP 2: Calling the API with PHP<span class="glyphicon glyphicon-asterisk pull-right"></span></a>
               <a href="step2.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Your First Request</a>
               <a href="step2.html#fileGetContents" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Using file_get_contents</a>
               <a href="step2.html#errorHandling" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Error Handling</a>
-              <a href="step3.html" class="list-group-item" data-toggle="collapse" data-target="#c" data-parent="#menu" style="background: #222; color:#fff;">STEP 3: Iterating over the Response Array</a>  
+              <a href="step3.html" class="list-group-item" style="background: #222; color:#fff;">STEP 3: Iterating over the Response Array</a>  
               <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> JSON Arrays in PHP</a>
               <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Converting a XML String to a JSON Array</a>
               <a href="step3.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Iterating over a JSON Array</a>
-              <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Recursive Iterators?</a>
+              <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Recursive Iterators</a>
               <a href="step3.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Accessing Elements in a Multidimensional Array</a>
-              <a href="step4.html" class="list-group-item" data-toggle="collapse" data-target="#d" data-parent="#menu" style="background: #222; color:#fff;">STEP 4: Outputting the Response<span class="glyphicon glyphicon-asterisk pull-right"></span></a>  
-              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What is DailyMed?</a>
-              <a href="step1.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> What are RESTful API's?</a>
-              <a href="step1.html#API" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> The DailyMed API</a>
+              <a href="step4.html" class="list-group-item" style="background: #222; color:#fff;">STEP 4: Outputting the Response</span></span></a>  
+              <a href="step4.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Outputting in Plain Text</a>
+              <a href="step4.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Outputting to HTML</a>
+              <a href="step5.html" class="list-group-item" style="background: #222; color:#fff;">STEP 5: Examining the DailyMed API</a>  
+              <a href="step5.html" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Advantages of the DailyMed API</a>
+              <a href="step5.html#limit" class="list-group-item small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> Limitations of the DailyMed API</a>>
             </div>
           </div>
         </div>
@@ -233,16 +226,10 @@ $jsonArray = json_decode($jsonString,TRUE);//TRUE converts JSON string JSON arra
         </div>
       </div>
 
-<script src="https://code.jquery.com/jquery.js"></script>
+<script src="js/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/rainbow.js"></script>
 <script src="js/generic.js"></script>
 <script src="js/php.js"></script>
- <!-- <script language="javascript">
-    $('.dropdown-toggle').dropdown();
-    $('.dropdown-menu').find('form').click(function (e) {
-        e.stopPropagation();
-      });
-  </script>-->
   </body>
 </html>
